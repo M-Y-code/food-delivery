@@ -9,7 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/react-hooks": "^3.1.5",
+    "@apollo/react-ssr": "^3.1.5",
+    "apollo-boost": "^0.4.7",
+    "apollo-link-http": "^1.5.17",
+    "graphql": "^15.0.0",
     "next": "12.2.2",
+    "next-apollo": "^3.1.10",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
