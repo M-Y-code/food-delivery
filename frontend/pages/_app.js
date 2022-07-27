@@ -4,7 +4,7 @@ import Head from "next/head"
 import Layout from "../components/Layout"
 import withData from "../lib/apollo"
 
-export class Myapp extends App {
+class Myapp extends App {
     render() {
         const { Component, pageProps } = this.props
         return (
@@ -20,4 +20,5 @@ export class Myapp extends App {
     }
 }
 
+//全てのコンポーネントでGraphQLを使用できるようにwithDataでラッピング
 export default withData(Myapp)
