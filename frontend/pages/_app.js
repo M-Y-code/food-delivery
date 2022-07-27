@@ -2,8 +2,9 @@ import React from "react"
 import App from "next/app"
 import Head from "next/head"
 import Layout from "../components/Layout"
+import withData from "../lib/apollo"
 
-export default class Myapp extends App {
+export class Myapp extends App {
     render() {
         const { Component, pageProps } = this.props
         return (
@@ -15,6 +16,8 @@ export default class Myapp extends App {
                     <Component {...pageProps} />
                 </Layout>
             </>
-        )
+        );
     }
 }
+
+export default withData(Myapp)
