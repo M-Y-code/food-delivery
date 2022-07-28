@@ -17,7 +17,7 @@ const query = gql`
 }
 `;
 
-const RestaurantList = () => {
+const RestaurantList = (props) => {
     //graphqlでクエリ内のデータ取得
     const { loading, error, data } = useQuery(query)
     if (loading) return <h1>Loading...</h1>
