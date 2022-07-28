@@ -20,14 +20,21 @@ const query = gql`
 const RestaurantList = (props) => {
     //graphqlでクエリ内のデータ取得
     const { loading, error, data } = useQuery(query)
+    //loadingがtrueの場合
     if (loading) return <h1>Loading...</h1>
+    //errorがtrueの場合
     if (error) return <h1>Error!!</h1>
     //データがあればhtmlを出力
     if (data) {
-        //データをmapで展開
+        //restaurantsに対してフィルターをかける
+        const searchQuery = data.restaurants.filter((restaurant) =>
+            //レストランのnameデータを小文字に変換し、propsで渡ってきた値が含まれているかどうか
+            restaurant.name.toLowerCase().includes(props.search)
+        )
+        //フィルター後のデータをmapで展開
         return (
             <Row>
-                {data.restaurants.map((res) => (
+                {searchQuery.map((res) => (
                     <Col xs="6" sm="4" key={res.id}>
                         <Card style={{ margin: "0 0.5rem 20px 0.5rem" }}>
                             <CardImg
