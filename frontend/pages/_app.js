@@ -11,6 +11,7 @@ class Myapp extends App {
     //fanctionの場合 const[state, setState] = useState(null)
     state = {
         user: null,
+        cart: { items: [], total: 0 }
     }
     setUser = (user) => {
         this.setState({ user })
@@ -44,13 +45,61 @@ class Myapp extends App {
         }
     }
 
+    //カートへ商品の追加
+    addItem = (item) => {
+        //今のカートの中からitemを検索
+        let { items } = this.state.cart
+        //カートの中身を一つずつ取り出しidを取得しitemのidと比較して存在すればnewItemに格納
+        const newItem = items.find((i) => i.id === item.id)
+        //カート内に見つからなければ(新しい商品であれば)個数を1に変更
+        if (!newItem) {
+            item.quantity = 1
+            //cartに追加する
+            this.setState({
+                cart: {
+                    //itemsに追加(スプレッド構文)
+                    items: [...items, item],
+                    //価格を加算
+                    total: this.state.cart.total + item.price,
+                },
+            },
+                //カート内情報をCookieに保存
+                () => Cookies.set("cart", this.state.cart.items)
+            )
+        }
+        else {
+            //既に同じ商品がカートに入っている場合
+            this.setState({
+                cart: {
+                    items: this.state.cart.items.map((item) => {
+                        //カート内のアイテムと選んだアイテムIDが同じ場合
+                        item.id === newItem.id ?
+                            //itemオブジェクトに対してquantityフィールドを追加してquantityに+1する
+                            Object.assign({}, item, { quantity: item.quantity + 1 })
+                            //違う場合itemのみを返す
+                            : item
+                    })
+                    //価格を加算
+                    , total: this.state.cart.total + item.price,
+                },
+            },
+                //カート内情報をCookieに保存
+                () => Cookies.set("cart", this.state.cart.items)
+            )
+        }
+    }
+
     render() {
         const { Component, pageProps } = this.props
         return (
             //appcontextから提供されるvalueを全てのコンポーネントで使えるようにする
             <AppContext.Provider
                 //現在のユーザー状態とユーザーがセットされている状態を渡す
-                value={{ user: this.state.user, setUser: this.setUser }}>
+                value={{
+                    user: this.state.user,
+                    setUser: this.setUser,
+                    addItem: this.addItem,
+                }}>
                 <>
                     <Head>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" />

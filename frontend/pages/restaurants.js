@@ -4,6 +4,8 @@ import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import router, { useRouter } from "next/router";
 import Cart from "../components/Cart";
+import { useContext } from "react";
+import AppContext from "../context/AppContext";
 
 //graphqlで指定したクエリ取得
 //$id ->どのレストランのidを叩くのか決める
@@ -28,6 +30,8 @@ const GET_RESTAURANT_DISHES = gql`
 `;
 
 const Restaurants = (props) => {
+    //AppContextで状態管理を使用
+    const appContext = useContext(AppContext)
     //useRouterをrouterに格納
     const router = useRouter();
     //graphqlでクエリ内のデータ取得
@@ -46,18 +50,18 @@ const Restaurants = (props) => {
             <>
                 <h1>{restaurant.name}</h1>
                 <Row>
-                    {restaurant.dishes.map((res) => (
-                        <Col xs="6" sm="4" key={res.id} style={{ padding: 0 }}>
+                    {restaurant.dishes.map((dish) => (
+                        <Col xs="6" sm="4" key={dish.id} style={{ padding: 0 }}>
                             <Card style={{ margin: "0 10px" }}>
                                 <CardImg
-                                    src={`${process.env.NEXT_PUBLIC_API_URL}${res.image.url}`}
+                                    src={`${process.env.NEXT_PUBLIC_API_URL}${dish.image.url}`}
                                     top={true} style={{ height: 250 }} />
                                 <CardBody>
-                                    <CardTitle>{res.name}</CardTitle>
-                                    <CardTitle>{res.description}</CardTitle>
+                                    <CardTitle>{dish.name}</CardTitle>
+                                    <CardTitle>{dish.description}</CardTitle>
                                 </CardBody>
                                 <div className="card-footer">
-                                    <Button outline color="primary">
+                                    <Button outline color="primary" onClick={() => appContext.additem(dish)}>
                                         + カートに入れる
                                     </Button>
                                 </div>
