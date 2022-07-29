@@ -98,6 +98,7 @@ class Myapp extends App {
                 //現在のユーザー状態とユーザーがセットされている状態を渡す
                 value={{
                     user: this.state.user,
+                    cart: this.state.cart,
                     setUser: this.setUser,
                     addItem: this.addItem,
                 }}>
