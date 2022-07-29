@@ -9,7 +9,6 @@ import AppContext from "../context/AppContext"
 const Layout = (props) => {
     //Appcontextで_appjsのvalue(state)を操作できるようにする
     const { user, setUser } = useContext(AppContext)
-    console.log(user)
     return (
         <div>
             <Head>

@@ -14,7 +14,7 @@ const register = () => {
             //成功時
             .then((res) => {
                 //_appjsのsetUserにuserレスポンスを展開して渡す
-                appContext.setUser({ ...data })
+                appContext.setUser(res.data.user)
             })
             //失敗時
             .catch((err) => console.log(err))
