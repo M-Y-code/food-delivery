@@ -61,7 +61,7 @@ const Restaurants = (props) => {
                                     <CardTitle>{dish.description}</CardTitle>
                                 </CardBody>
                                 <div className="card-footer">
-                                    <Button outline color="primary" onClick={() => appContext.additem(dish)}>
+                                    <Button outline color="primary" onClick={() => appContext.addItem(dish)}>
                                         + カートに入れる
                                     </Button>
                                 </div>

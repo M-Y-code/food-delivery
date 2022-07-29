@@ -51,6 +51,7 @@ class Myapp extends App {
         let { items } = this.state.cart
         //カートの中身を一つずつ取り出しidを取得しitemのidと比較して存在すればnewItemに格納
         const newItem = items.find((i) => i.id === item.id)
+        console.log(newItem)
         //カート内に見つからなければ(新しい商品であれば)個数を1に変更
         if (!newItem) {
             item.quantity = 1
@@ -71,14 +72,14 @@ class Myapp extends App {
             //既に同じ商品がカートに入っている場合
             this.setState({
                 cart: {
-                    items: this.state.cart.items.map((item) => {
+                    items: this.state.cart.items.map((item) =>
                         //カート内のアイテムと選んだアイテムIDが同じ場合
                         item.id === newItem.id ?
                             //itemオブジェクトに対してquantityフィールドを追加してquantityに+1する
                             Object.assign({}, item, { quantity: item.quantity + 1 })
                             //違う場合itemのみを返す
                             : item
-                    })
+                    )
                     //価格を加算
                     , total: this.state.cart.total + item.price,
                 },
