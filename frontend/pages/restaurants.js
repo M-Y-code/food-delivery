@@ -3,6 +3,7 @@ import { Button, Card, CardBody, CardImg, CardTitle, Col, Row } from "reactstrap
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import router, { useRouter } from "next/router";
+import Cart from "../components/Cart";
 
 //graphqlで指定したクエリ取得
 //$id ->どのレストランのidを叩くのか決める
@@ -80,6 +81,11 @@ const Restaurants = (props) => {
                     }
                     `}
                     </style>
+                    <Col xs="3" style={{ padding: 0 }}>
+                        <div>
+                            <Cart />
+                        </div>
+                    </Col>
                 </Row>
             </>
         );
