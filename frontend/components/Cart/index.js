@@ -60,7 +60,7 @@ const Cart = () => {
                             <div>
                                 <Link href="/checkout">
                                     <Button style={{ width: "100%" }} color="primary">
-                                        <a href="" color="white">注文する</a>
+                                        <a href="" style={{ color: "white" }}>注文する</a>
                                     </Button>
                                 </Link>
                             </div>
