@@ -3,20 +3,35 @@ import App from "next/app"
 import Head from "next/head"
 import Layout from "../components/Layout"
 import withData from "../lib/apollo"
+import AppContext from "../context/AppContext"
 
 class Myapp extends App {
+    //ユーザー状態をstateで管理(クラスコンポーネントの書き方)
+    //fanctionの場合 const[state, setState] = useState(null)
+    state = {
+        user: null,
+    }
+    setUser = (user) => {
+        this.setState({ user })
+    }
+
     render() {
         const { Component, pageProps } = this.props
         return (
-            <>
-                <Head>
-                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" />
-                </Head>
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
-            </>
-        );
+            //appcontextから提供されるvalueを全てのコンポーネントで使えるようにする
+            <AppContext.Provider
+                //現在のユーザー状態とユーザーがセットされている状態を渡す
+                value={{ user: this.state.user, setUser: this.setUser }}>
+                <>
+                    <Head>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" />
+                    </Head>
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
+                </>
+            </AppContext.Provider>
+        )
     }
 }
 
