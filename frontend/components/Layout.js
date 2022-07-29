@@ -1,11 +1,14 @@
-import React from "react"
+import React, { useContext } from "react"
 import App from "next/app"
 import Head from "next/head"
 import Link from "next/link"
 import { Container, Nav, NavItem } from "reactstrap"
+import AppContext from "../context/AppContext"
 
 
 const Layout = (props) => {
+    //Appcontextで_appjsのvalue(state)を操作できるようにする
+    const { user, setUser } = useContext(AppContext)
     return (
         <div>
             <Head>
@@ -27,14 +30,32 @@ const Layout = (props) => {
                         </Link>
                     </NavItem>
                     <NavItem className="ml-auto">
-                        <Link href="/login">
-                            <a className="nav-link">サインイン</a>
-                        </Link>
+                        {/* _appjsのstateにユーザーが存在すればログアウト存在しなければログイン表示 */}
+                        {user ? (
+                            <Link href="/">
+                                <a
+                                    className="nav-link"
+                                    //クリック時setUserをnullに変更
+                                    onClick={() => {
+                                        setUser(null)
+                                    }}
+                                >ログアウト</a>
+                            </Link>
+                        ) : (
+                            <Link href="/login">
+                                <a className="nav-link">ログイン</a>
+                            </Link>
+                        )}
                     </NavItem>
                     <NavItem>
-                        <Link href="/register">
-                            <a className="nav-link">サインアップ</a>
-                        </Link>
+                        {/* _appjsのstateにユーザーが存在すれば名前表示存在しなければ新規登録表示 */}
+                        {user ? (
+                            <h5>{user.username}</h5>
+                        ) : (
+                            <Link href="/register">
+                                <a className="nav-link">新規登録</a>
+                            </Link>
+                        )}
                     </NavItem>
                 </Nav>
             </header>

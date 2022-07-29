@@ -13,13 +13,12 @@ const register = () => {
         registerUser(data.username, data.email, data.password)
             //成功時
             .then((res) => {
-                //_appjsのsetUserにuserレスポンスを渡す
-                appContext.setUser(res.data.user)
+                //_appjsのsetUserにuserレスポンスを展開して渡す
+                appContext.setUser(...data)
             })
             //失敗時
             .catch((err) => console.log(err))
     }
-    console.log(data)
 
     return (
         <Container>
