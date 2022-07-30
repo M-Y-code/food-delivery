@@ -1,6 +1,6 @@
 //createContexthooksを使用
-import react, { createContext } from "react"
+import react, { createContext } from "react";
 
-const AppContext = createContext()
+const AppContext = createContext();
 
-export default AppContext
+export default AppContext;
