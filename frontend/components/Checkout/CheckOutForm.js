@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 import AppContext from "../../context/AppContext";
 import { useContext, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { responsePathAsArray } from "graphql";
 
 const CheckoutForm = () => {
   //打ち込んだ住所情報取得
@@ -12,6 +11,8 @@ const CheckoutForm = () => {
     address: "",
     stripe_id: "",
   });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   //安全にカード情報を送信するためにreactstripeのhooksを使用してtokenを作成する準備
   const elements = useElements();
@@ -55,9 +56,11 @@ const CheckoutForm = () => {
       }),
     });
     if (response.ok) {
-      console.log("注文に成功しました");
+      /* console.log("注文に成功しました"); */
+      setSuccess("注文に成功しました");
     } else {
-      console.log("注文に失敗しました");
+      /* console.log("注文に失敗しました"); */
+      setError("注文に失敗しました");
     }
   };
   return (
@@ -71,7 +74,11 @@ const CheckoutForm = () => {
         </div>
       </FormGroup>
 
-      <CardSection submitOrder={submitOrder} />
+      <CardSection
+        submitOrder={submitOrder}
+        eroorMsg={error}
+        successMsg={success}
+      />
       <style jsx global>
         {`
           .paper {

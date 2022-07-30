@@ -15,6 +15,9 @@ const CardSection = (props) => {
               <div className="order-button-wrapper">
                 <button onClick={props.submitOrder}>注文を確認</button>
               </div>
+              {/* 決済エラーだったらエラーメッセージを表示 */}
+              {props.errorMsg ? <div>{props.errorMsg}</div> : null}
+              {props.successMsg ? <div>{props.successMsg}</div> : null}
             </div>
           </fieldset>
         </div>
