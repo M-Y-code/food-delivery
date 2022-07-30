@@ -22,8 +22,8 @@ class Myapp extends App {
         const token = Cookies.get("token")//tokenの中にjwtが入っている
         const cart = Cookies.get("cart")//クッキーに残っているカート情報を取得
 
-        //カートが未定義以外の場合
-        if (cart !== "undefind") {
+        //カートが未定義以外の場合かつカート内がstring型の時
+        if (cart !== "undefind" && typeof cart === "string") {
             //配列をJSON形式に変換
             JSON.parse(cart)
                 //カート内を一つずつ取り出し
