@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import AppContext from "../../context/AppContext";
 import { useContext, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { responsePathAsArray } from "graphql";
 
 const CheckoutForm = () => {
   //打ち込んだ住所情報取得
@@ -53,6 +54,11 @@ const CheckoutForm = () => {
         token: token.token.id,
       }),
     });
+    if (response.ok) {
+      console.log("注文に成功しました");
+    } else {
+      console.log("注文に失敗しました");
+    }
   };
   return (
     <div className="paper">
@@ -65,7 +71,7 @@ const CheckoutForm = () => {
         </div>
       </FormGroup>
 
-      <CardSection />
+      <CardSection submitOrder={submitOrder} />
       <style jsx global>
         {`
           .paper {
