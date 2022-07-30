@@ -34,7 +34,11 @@ const Cart = () => {
                   //もし個数が一個でもあれば内容表示
                   if (item.quantity > 0) {
                     return (
-                      <div className="items-one" style={{ marginBottom: 15 }}>
+                      <div
+                        className="items-one"
+                        style={{ marginBottom: 15 }}
+                        key={item.id}
+                      >
                         <div>
                           <span id="item-price">&nbsp; {item.price}円</span>
                           <span id="item-name">&nbsp; {item.name}</span>
@@ -82,11 +86,11 @@ const Cart = () => {
                 <h3>{cart.total}円</h3>
               </Badge>
               <div>
-                <Link href="/checkout">
-                  <Button style={{ width: "100%" }} color="primary">
+                <Button style={{ width: "100%" }} color="primary">
+                  <Link href="/checkout">
                     <a style={{ color: "white" }}>注文する</a>
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>
