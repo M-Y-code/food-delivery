@@ -1,7 +1,47 @@
 import { FormGroup, Input, Label } from "reactstrap";
 import CardSection from "./CardSection";
+import Cookies from "js-cookie";
+import AppContext from "../../context/AppContext";
+import { useContext, useState } from "react";
 
 const CheckoutForm = () => {
+  //打ち込んだ住所情報取得
+  const [data, setData] = useState({
+    address: "",
+    stripe_id: "",
+  });
+  const handleChange = (e) => {
+    //打ち込んでいる欄のname属性[address]に打ち込んでいる値を入れる
+    const updateItem = (data[e.target.name] = e.target.value);
+    //現在のdataを展開してupdateItemで更新していく
+    setData({ ...data, updateItem });
+  };
+
+  //appcontextでカート内情報を持ってくる
+  const appContext = useContext(AppContext);
+  //jwtトークンを持ってくる
+  const userToken = Cookies.get("token");
+  //注文を確定させる関数
+  const submitOrder = async () => {
+    //strapiのordersのエンドポイントを叩く
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
+      //ポストメソッドを叩く
+      method: "POST",
+      headers: userToken && {
+        //Bearerトークンが無いとPOST投稿ができないので設定
+        Authorization: `Bearer ${userToken}`,
+      },
+      //投稿データとしてJavaScriptのオブジェクトや値をJSON文字列に変換
+      body: JSON.stringify({
+        //amount(合計)をカート内情報の合計に設定
+        amount: Number(appContext.cart.total),
+        //注文の料理を全て設定
+        dishes: appContext.cart.items,
+        //onChangeで持ってきた住所を入れる
+        address: data.address,
+      }),
+    });
+  };
   return (
     <div className="paper">
       <h5>あなたの情報</h5>
@@ -9,7 +49,7 @@ const CheckoutForm = () => {
       <FormGroup>
         <div>
           <Label>住所</Label>
-          <Input name="address" />
+          <Input name="address" onChange={(e) => handleChange(e)} />
         </div>
       </FormGroup>
 
