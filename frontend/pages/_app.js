@@ -20,6 +20,25 @@ class Myapp extends App {
     //マウント時に既にクッキー情報が残っているかを確認する
     componentDidMount() {
         const token = Cookies.get("token")//tokenの中にjwtが入っている
+        const cart = Cookies.get("cart")//クッキーに残っているカート情報を取得
+
+        //カートが未定義以外の場合
+        if (cart !== "undefind") {
+            //配列をJSON形式に変換
+            JSON.parse(cart)
+                //カート内を一つずつ取り出し
+                .forEach((item) => {
+                    this.setState({
+                        //itemsにカートの内容、
+                        cart: {
+                            items: JSON.parse(cart),
+                            //totalに直前のカートの状態+=アイテムの値段×個数を挿入
+                            total: this.state.cart.total += item.price * item.quantity
+                        },
+                    })
+                });
+        }
+
         //tokenがセットされていれば
         if (token) {
             //users/meのBearerの同じjwtエンドポイントを叩く
@@ -51,7 +70,6 @@ class Myapp extends App {
         let { items } = this.state.cart
         //カートの中身を一つずつ取り出しidを取得しitemのidと比較して存在すればnewItemに格納
         const newItem = items.find((i) => i.id === item.id)
-        console.log(newItem)
         //カート内に見つからなければ(新しい商品であれば)個数を1に変更
         if (!newItem) {
             item.quantity = 1
@@ -90,6 +108,54 @@ class Myapp extends App {
         }
     }
 
+    //カートから商品を削除
+    removeItem = (item) => {
+        //今のカートの中からitemを検索
+        let { items } = this.state.cart
+        //カートの中身を一つずつ取り出しidを取得しitemのidと比較して存在すればnewItemに格納
+        const newItem = items.find((i) => i.id === item.id)
+        //カート内の個数が１より多ければ
+        if (newItem.quantity > 1) {
+            this.setState({
+                cart: {
+                    items: this.state.cart.items.map((item) =>
+                        //カート内のアイテムと選んだアイテムIDが同じ場合
+                        item.id === newItem.id ?
+                            //itemオブジェクトに対してquantityフィールドを追加してquantityに-1する
+                            Object.assign({}, item, { quantity: item.quantity - 1 })
+                            //違う場合itemのみを返す
+                            : item
+                    ),
+                    //価格を減算
+                    total: this.state.cart.total - item.price,
+                },
+            },
+                //カート内情報をCookieに保存
+                () => Cookies.set("cart", this.state.cart.items)
+            )
+        }
+        else {
+            //カートに入っている商品が一つの場合
+            //現在のカートの中身を展開
+            const items = [...this.state.cart.items]
+            //カートの中身と-を押した商品のINDEXが同じ時
+            const index = items.findIndex((i) => i.id === newItem.id)
+            //カートの中身から指定したINEX番号を一つだけ削除する
+            items.splice(index, 1)
+            this.setState({
+                cart: {
+                    //削除後のitemsを渡す
+                    items: items,
+                    //価格を減算
+                    total: this.state.cart.total - item.price,
+                },
+            },
+                //カート内情報をCookieに保存
+                () => Cookies.set("cart", this.state.cart.items)
+            )
+        }
+    }
+
     render() {
         const { Component, pageProps } = this.props
         return (
@@ -101,6 +167,7 @@ class Myapp extends App {
                     cart: this.state.cart,
                     setUser: this.setUser,
                     addItem: this.addItem,
+                    removeItem: this.removeItem,
                 }}>
                 <>
                     <Head>
