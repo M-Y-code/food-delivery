@@ -82,13 +82,11 @@ const Cart = () => {
                 <h3>{cart.total}円</h3>
               </Badge>
               <div>
-                <Button style={{ width: "100%" }} color="primary">
-                  <Link href="/checkout">
-                    <a href="" style={{ color: "white" }}>
-                      注文する
-                    </a>
-                  </Link>
-                </Button>
+                <Link href="/checkout">
+                  <Button style={{ width: "100%" }} color="primary">
+                    <a style={{ color: "white" }}>注文する</a>
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
