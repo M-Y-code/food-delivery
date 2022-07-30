@@ -3,6 +3,7 @@ import CardSection from "./CardSection";
 import Cookies from "js-cookie";
 import AppContext from "../../context/AppContext";
 import { useContext, useState } from "react";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
 const CheckoutForm = () => {
   //打ち込んだ住所情報取得
@@ -10,6 +11,11 @@ const CheckoutForm = () => {
     address: "",
     stripe_id: "",
   });
+
+  //安全にカード情報を送信するためにreactstripeのhooksを使用してtokenを作成する準備
+  const elements = useElements();
+  const stripe = useStripe();
+
   const handleChange = (e) => {
     //打ち込んでいる欄のname属性[address]に打ち込んでいる値を入れる
     const updateItem = (data[e.target.name] = e.target.value);
@@ -23,6 +29,10 @@ const CheckoutForm = () => {
   const userToken = Cookies.get("token");
   //注文を確定させる関数
   const submitOrder = async () => {
+    //カードエレメントを取ってくる
+    const cardElement = elements.getElement(CardElement);
+    //カードエレメントでトークンを作成して安全に送信する
+    const token = await stripe.createToken(cardElement);
     //strapiのordersのエンドポイントを叩く
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
       //ポストメソッドを叩く
@@ -39,6 +49,8 @@ const CheckoutForm = () => {
         dishes: appContext.cart.items,
         //onChangeで持ってきた住所を入れる
         address: data.address,
+        //カードのトークンidを入れる
+        token: token.token.id,
       }),
     });
   };
